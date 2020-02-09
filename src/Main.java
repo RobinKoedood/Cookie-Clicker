@@ -9,6 +9,7 @@ import java.util.TimerTask;
 import Automatic.AutoCursor;
 import Automatic.Automatic;
 import Automatic.Grandma;
+import Automatic.Farm;
 import javafx.application.Application;
 
 import static javafx.application.Application.launch;
@@ -40,11 +41,13 @@ public class Main extends Application {
 
     private int amountOfCursors;
     private int amountOfGrandmas;
+    private int amountOfFarms;
 
     private double multiplicationCursor;
 
     private Button buttonCursor;
     private Button buttonGrandma;
+    private Button buttonFarm;
 
 
     @Override
@@ -84,9 +87,9 @@ public class Main extends Application {
                 System.out.println("Amount of cookies: " + cookieAnoumt);
                 System.out.println("Per second: " + perSecond);
 
-                if (reader.hasNextLine()) {
+                /*if (reader.hasNextLine()) {
                     cookieAnoumt = Integer.parseInt(reader.nextLine());
-                }
+                }*/
 
             }
         }, 1, 1000);
@@ -105,10 +108,13 @@ public class Main extends Application {
     private Node getAutomatics() {
         VBox vBox = new VBox();
         AutoCursor autoCursor = new AutoCursor();
+        Grandma grandma = new Grandma();
+        Farm farm = new Farm();
         buttonCursor = new Button();
-        buttonCursor.setText("Cursor +1" + "Cost = " + autoCursor.getCost());
-        buttonGrandma = new Button("Grandma +1");
-        vBox.getChildren().addAll(buttonCursor, buttonGrandma);
+        buttonCursor.setText("Cursor +1" + " Cost = " + autoCursor.getCost());
+        buttonGrandma = new Button("Grandma +1" + " Cost = " + grandma.getCost() );
+        buttonFarm = new Button( "Farm +1" + " Cost = " + farm.getCost());
+        vBox.getChildren().addAll(buttonCursor, buttonGrandma, buttonFarm);
 
         getButtonLogics();
 
@@ -119,11 +125,11 @@ public class Main extends Application {
         buttonCursor.setOnAction(event -> {
             amountOfCursors++;
             AutoCursor autoCursor = new AutoCursor();
-            perSecond += autoCursor.getMultiplication();
-            perSecond *= 10;
-            perSecond = Math.round(perSecond);
-            perSecond /= 10;
             if (cookieAnoumt >= autoCursor.getCost()) {
+                perSecond += autoCursor.getMultiplication();
+                perSecond *= 10;
+                perSecond = Math.round(perSecond);
+                perSecond /= 10;
                 cookieAnoumt -= autoCursor.getCost();
                 automatics.add(autoCursor);
                 System.out.println("New Cursor added");
@@ -139,16 +145,36 @@ public class Main extends Application {
         buttonGrandma.setOnAction(event -> {
             amountOfGrandmas++;
             Grandma grandma = new Grandma();
-            perSecond += grandma.getMultiplication();
-            perSecond *= 10;
-            perSecond = Math.round(perSecond);
-            perSecond /= 10;
             if (cookieAnoumt >= grandma.getCost()){
+                perSecond += grandma.getMultiplication();
+                perSecond *= 10;
+                perSecond = Math.round(perSecond);
+                perSecond /= 10;
                 cookieAnoumt -= grandma.getCost();
                 automatics.add(grandma);
                 System.out.println("New Grandma added");
 
                 System.out.println("Amount of Grandma's: " + amountOfGrandmas);
+                System.out.println("Amount of cookies: " + cookieAnoumt);
+            }else {
+                System.out.println("Not enough cookies. Click more!!");
+            }
+            updateDisplay();
+        });
+
+        buttonFarm.setOnAction(event -> {
+            amountOfFarms++;
+            Farm farm = new Farm();
+            if (cookieAnoumt >= farm.getCost()){
+                perSecond += farm.getMultiplication();
+                perSecond *= 10;
+                perSecond = Math.round(perSecond);
+                perSecond /= 10;
+                cookieAnoumt -= farm.getCost();
+                automatics.add(farm);
+                System.out.println("New Grandma added");
+
+                System.out.println("Amount of Grandma's: " + amountOfFarms);
                 System.out.println("Amount of cookies: " + cookieAnoumt);
             }else {
                 System.out.println("Not enough cookies. Click more!!");
