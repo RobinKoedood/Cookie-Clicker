@@ -172,9 +172,9 @@ public class Main extends Application {
                 perSecond /= 10;
                 cookieAnoumt -= farm.getCost();
                 automatics.add(farm);
-                System.out.println("New Grandma added");
+                System.out.println("New Farm added");
 
-                System.out.println("Amount of Grandma's: " + amountOfFarms);
+                System.out.println("Amount of Farms: " + amountOfFarms);
                 System.out.println("Amount of cookies: " + cookieAnoumt);
             }else {
                 System.out.println("Not enough cookies. Click more!!");

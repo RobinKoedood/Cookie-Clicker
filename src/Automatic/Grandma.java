@@ -1,5 +1,7 @@
 package Automatic;
 
+import javafx.scene.control.Button;
+
 public class Grandma implements Automatic {
     private int updateAmount = 0;
     @Override
@@ -26,5 +28,10 @@ public class Grandma implements Automatic {
         } else {
             return 0;
         }
+    }
+
+    private Button buttonGrandma (){
+        Button button = new Button("Grandma");
+        return button;
     }
 }
