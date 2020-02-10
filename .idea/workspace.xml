@@ -16,12 +16,16 @@
       </list>
     </option>
   </component>
-<<<<<<< HEAD
   <component name="FindInProjectRecents">
     <findStrings>
       <find>drawImage</find>
       <find>Idle</find>
     </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+    &gt;&gt;&gt;&gt;&gt;&gt;&gt; master
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -42,56 +46,11 @@
     <option name="width" value="980" />
     <option name="height" value="1050" />
   </component>
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="D:\School\Periode 1\Java\TMCProjects\2017_avans_ti_breda-2D_Graphics-2019\week2-006.BlockDrag" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Eindopdracht" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="D:\School\Periode 1\Java\TMCProjects\2017_avans_ti_breda-2D_Graphics-2019\week2-006.BlockDrag" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Eindopdracht" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="D:\School\Periode 1\Java\TMCProjects\2017_avans_ti_breda-2D_Graphics-2019\week2-006.BlockDrag" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Eindopdracht" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="D:\School\Periode 1\Java\TMCProjects\2017_avans_ti_breda-2D_Graphics-2019\week2-006.BlockDrag" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Eindopdracht" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="Automatic" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="D:\School\Periode 1\Java\TMCProjects\2017_avans_ti_breda-2D_Graphics-2019\week2-006.BlockDrag" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
-    </panes>
-=======
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="ROOT_SYNC" value="DONT_SYNC" />
->>>>>>> master
-  </component>
   <component name="ProjectId" id="1XaMgdwY1yGfV5dQG78jOdJuNbD" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1581077633495" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1581320846896" />
     <property name="last_opened_file_path" value="C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Git/Git Bash.lnk" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
