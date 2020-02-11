@@ -3,6 +3,7 @@ package Automatic;
 public class Farm implements Automatic {
 
     private int updateAmount;
+    private int amountOfFarms;
 
     @Override
     public String getname() {
@@ -27,5 +28,13 @@ public class Farm implements Automatic {
             return 10;
         }
         return 0;
+    }
+
+    public void addFarm(){
+        amountOfFarms++;
+    }
+
+    public int getAmountOfFarms(){
+        return this.amountOfFarms;
     }
 }
