@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="week2-006.BlockDrag" type="Application" factoryName="Application">
+  <configuration default="false" name="Cookie-Clicker" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="Main" />
-    <module name="week2-006.BlockDrag" />
+    <module name="Cookie-Clicker" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
