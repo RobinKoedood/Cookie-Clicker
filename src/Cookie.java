@@ -1,6 +1,7 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -25,6 +26,10 @@ public class Cookie {
     public BufferedImage getImageIdle(){
         return this.fullImg.getSubimage(0,0,128,128);
 
+    }
+
+    public void setEllipse2D(Ellipse2D ellipse2D){
+        this.ellipse2D = ellipse2D;
     }
 
     public BufferedImage getImageHover(){
