@@ -215,6 +215,9 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+        for (int i = 0; i < 100; i++) {
+            //System.out.println(15.0 * Math.pow());
+        }
         launch(Main.class);
     }
 
