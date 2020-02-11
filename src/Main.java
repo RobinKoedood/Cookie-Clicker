@@ -19,6 +19,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -71,6 +72,7 @@ public class Main extends Application {
 
         primaryStage.setScene(new Scene(mainPane));
         primaryStage.setTitle("Cookie Clicker");
+        primaryStage.getIcons().add(new Image("favicon.png"));
         primaryStage.show();
         draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
 
