@@ -1,6 +1,8 @@
 
 import java.awt.*;
 import java.awt.geom.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Timer;
@@ -21,12 +23,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
+
+import javax.imageio.ImageIO;
 
 public class Main extends Application {
     private static int cookieAnoumt = 0;
@@ -53,6 +56,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         System.out.println("start");
         automatics = new ArrayList<>();
         BorderPane mainPane = new BorderPane();
@@ -70,8 +74,11 @@ public class Main extends Application {
         mainPane.setTop(getVboxAmounts());
         mainPane.setRight(getAutomatics());
 
-        primaryStage.setScene(new Scene(mainPane));
+
+        Scene scene = new Scene(mainPane);
+        primaryStage.setScene(scene);
         primaryStage.setTitle("Cookie Clicker");
+
         primaryStage.getIcons().add(new Image("favicon.png"));
         primaryStage.show();
         draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
@@ -186,10 +193,19 @@ public class Main extends Application {
     }
 
 
-    public void draw(FXGraphics2D graphics) {
+    public void draw(FXGraphics2D graphics)  {
+        BufferedImage total = null;
+        try {
+            total = ImageIO.read(getClass().getResource("/bgBlue.png"));
+            graphics.setPaint(new TexturePaint(total, new Rectangle2D.Double(canvas.getWidth()/2, canvas.getHeight()/2, canvas.getWidth(), canvas.getHeight())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //BackgroundImage backgroundImage = new BackgroundImage(new Image("bgBlue.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         graphics.setTransform(new AffineTransform());
         graphics.setBackground(Color.white);
         graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
+
 
         cookie = new Cookie(Color.BLACK, new Ellipse2D.Double(canvas.getWidth() / 2 - 100, canvas.getHeight() / 2 - 100, 200, 200));
 
