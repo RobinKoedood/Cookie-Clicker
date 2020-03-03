@@ -96,10 +96,9 @@ public class Main extends Application {
                         cookieAnoumt += automatic.update();
                     }
                 }
-
+                updateDisplay();
                 System.out.println("Amount of cookies: " + cookieAnoumt);
                 System.out.println("Per second: " + perSecond);
-                draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
 //                if (reader.hasNextLine()) {
 //                    cookieAnoumt = Integer.parseInt(reader.nextLine());
 //                }
@@ -201,6 +200,11 @@ public class Main extends Application {
 
     public void draw(FXGraphics2D graphics) {
         updateDisplay();
+
+        //BackgroundImage backgroundImage = new BackgroundImage(new Image("bgBlue.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        graphics.setTransform(new AffineTransform());
+        graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
+
         BufferedImage total = null;
         try {
             total = ImageIO.read(getClass().getResource("/bgBlue.png"));
@@ -208,32 +212,25 @@ public class Main extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //BackgroundImage backgroundImage = new BackgroundImage(new Image("bgBlue.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-        graphics.setTransform(new AffineTransform());
-        graphics.setBackground(Color.white);
-        graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
 
         cookie.setEllipse2D(new Ellipse2D.Double(canvas.getWidth() / 2 - 100, canvas.getHeight() / 2 - 100, 200, 200));
-        graphics.draw(cookie.getEllipse2D());
+        //graphics.draw(cookie.getEllipse2D());
 
         switch (cookieState) {
             case IDLE:
-                graphics.drawImage(cookie.getImageIdle(), (int) canvas.getWidth() / 2 - 100, (int) canvas.getHeight() / 2 - 100, 200, 200, Color.WHITE, null);
+                graphics.drawImage(cookie.getImageIdle(), (int) canvas.getWidth() / 2 - 100, (int) canvas.getHeight() / 2 - 100, 200, 200, null);
                 break;
             case HOVER:
-                graphics.drawImage(cookie.getImageHover(), (int) canvas.getWidth() / 2 - 100, (int) canvas.getHeight() / 2 - 100, 200, 200, Color.WHITE, null);
+                graphics.drawImage(cookie.getImageHover(), (int) canvas.getWidth() / 2 - 100, (int) canvas.getHeight() / 2 - 100, 200, 200, null);
                 break;
             case HELD:
-                graphics.drawImage(cookie.getImageHeld(), (int) canvas.getWidth() / 2 - 100, (int) canvas.getHeight() / 2 - 100, 200, 200, Color.WHITE, null);
+                graphics.drawImage(cookie.getImageHeld(), (int) canvas.getWidth() / 2 - 100, (int) canvas.getHeight() / 2 - 100, 200, 200, null);
                 break;
         }
     }
 
 
     public static void main(String[] args) {
-        for (int i = 0; i < 100; i++) {
-            //System.out.println(15.0 * Math.pow());
-        }
         launch(Main.class);
     }
 
