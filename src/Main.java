@@ -276,4 +276,13 @@ public class Main extends Application {
     }
 
 
+    private double roundOf(double perSecond) {
+        perSecond *= 10;
+        perSecond = Math.round(perSecond);
+        perSecond /= 10;
+
+        return perSecond;
+    }
+
+
 }
