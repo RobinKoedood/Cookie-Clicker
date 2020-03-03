@@ -6,7 +6,7 @@ public class Farm implements Automatic {
     private int amountOfFarms;
 
     @Override
-    public String getname() {
+    public String getName() {
         return "Farm";
     }
 

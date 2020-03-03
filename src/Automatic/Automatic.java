@@ -2,7 +2,7 @@ package Automatic;
 
 public interface Automatic {
 
-    String getname();
+    String getName();
     int getCost();
     double getMultiplication();
     int update();

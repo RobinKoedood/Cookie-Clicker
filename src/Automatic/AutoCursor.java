@@ -27,7 +27,7 @@ public class AutoCursor implements Automatic {
     }
 
     @Override
-    public String getname() {
+    public String getName() {
         return "Cursor";
     }
 

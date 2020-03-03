@@ -16,7 +16,7 @@ public class Grandma implements Automatic {
     }
 
     @Override
-    public String getname() {
+    public String getName() {
         return "Grandma";
     }
 

@@ -37,16 +37,12 @@ public class Main extends Application {
     private static double perSecond = 0.0;
     private static ResizableCanvas canvas;
     private static ArrayList<Automatic> automatics;
-    private ArrayList<Cookie> cookies;
     private Cookie cookie = null;
     private Scanner reader = new Scanner(System.in);
 
     private Label labelAmount;
     private Label labelPerSecond;
-
-    private int amountOfCursors;
-    private int amountOfGrandmas;
-    private int amountOfFarms;
+    private Label labelInformation;
 
     private double multiplicationCursor;
 
@@ -74,6 +70,7 @@ public class Main extends Application {
 
         labelAmount = new Label("Amount of cookies: " + cookieAnoumt);
         labelPerSecond = new Label("Per second : " + perSecond);
+        labelInformation = new Label ();
         mainPane.setTop(getVboxAmounts());
         mainPane.setRight(getAutomatics());
 
@@ -114,7 +111,7 @@ public class Main extends Application {
 
     private Node getVboxAmounts() {
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(labelAmount, labelPerSecond);
+        vBox.getChildren().addAll(labelAmount, labelPerSecond, labelInformation);
 
         return vBox;
     }
@@ -144,9 +141,8 @@ public class Main extends Application {
                 roundOf(perSecond);
                 cookieAnoumt -= autoCursor.getCost();
                 automatics.add(autoCursor);
-                System.out.println("New Cursor added");
+                labelInformation.setText("New Cursor added!" + " Amount of Cursors: " + autoCursor.getAmountOfAutoCursors());
 
-                System.out.println("Amount of cursors: " + autoCursor.getAmountOfAutoCursors());
                 System.out.println("Amount of cookies: " + cookieAnoumt);
             } else {
                 System.out.println("Not enough cookies. Click more!!");
@@ -162,9 +158,8 @@ public class Main extends Application {
                 roundOf(perSecond);
                 cookieAnoumt -= grandma.getCost();
                 automatics.add(grandma);
-                System.out.println("New Grandma added");
+                labelInformation.setText("New Grandma added!" + " Amount of Grandma's: " + grandma.getAmountOfGrandmas());
 
-                System.out.println("Amount of Grandma's: " + grandma.getAmountOfGrandmas());
                 System.out.println("Amount of cookies: " + cookieAnoumt);
             } else {
                 System.out.println("Not enough cookies. Click more!!");
@@ -180,9 +175,8 @@ public class Main extends Application {
                 roundOf(perSecond);
                 cookieAnoumt -= farm.getCost();
                 automatics.add(farm);
-                System.out.println("New Farm added");
+                labelInformation.setText("New farm added!" + " Amount of farms: " + farm.getAmountOfFarms());
 
-                System.out.println("Amount of Farms: " + farm.getAmountOfFarms());
                 System.out.println("Amount of cookies: " + cookieAnoumt);
             } else {
                 System.out.println("Not enough cookies. Click more!!");
@@ -267,6 +261,7 @@ public class Main extends Application {
             Platform.runLater(() -> {
                         labelAmount.setText("Amount of cookies: " + cookieAnoumt);
                         labelPerSecond.setText("Per second: " + perSecond);
+
                     }
             );
 
