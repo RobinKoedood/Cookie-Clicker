@@ -1,7 +1,11 @@
 package Automatic;
 
+import java.util.ArrayList;
+
 public class AutoCursor implements Automatic {
     private int updateAmount = 0;
+    private ArrayList<AutoCursor> autoCursors = new ArrayList<>();
+    private int amountOfAutoCursors;
     @Override
     public int getCost() {
         return 25;
@@ -25,5 +29,13 @@ public class AutoCursor implements Automatic {
     @Override
     public String getname() {
         return "Cursor";
+    }
+
+    public void addCursor(){
+        amountOfAutoCursors++;
+    }
+
+    public int getAmountOfAutoCursors(){
+        return this.amountOfAutoCursors;
     }
 }

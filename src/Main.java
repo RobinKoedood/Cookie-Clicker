@@ -137,18 +137,16 @@ public class Main extends Application {
 
     private void getButtonLogics() {
         buttonCursor.setOnAction(event -> {
-            amountOfCursors++;
             AutoCursor autoCursor = new AutoCursor();
+            autoCursor.addCursor();
             if (cookieAnoumt >= autoCursor.getCost()) {
                 perSecond += autoCursor.getMultiplication();
-                perSecond *= 10;
-                perSecond = Math.round(perSecond);
-                perSecond /= 10;
+                roundOf(perSecond);
                 cookieAnoumt -= autoCursor.getCost();
                 automatics.add(autoCursor);
                 System.out.println("New Cursor added");
 
-                System.out.println("Amount of cursors: " + amountOfCursors);
+                System.out.println("Amount of cursors: " + autoCursor.getAmountOfAutoCursors());
                 System.out.println("Amount of cookies: " + cookieAnoumt);
             } else {
                 System.out.println("Not enough cookies. Click more!!");
@@ -157,18 +155,16 @@ public class Main extends Application {
         });
 
         buttonGrandma.setOnAction(event -> {
-            amountOfGrandmas++;
             Grandma grandma = new Grandma();
+            grandma.addGrandma();
             if (cookieAnoumt >= grandma.getCost()) {
                 perSecond += grandma.getMultiplication();
-                perSecond *= 10;
-                perSecond = Math.round(perSecond);
-                perSecond /= 10;
+                roundOf(perSecond);
                 cookieAnoumt -= grandma.getCost();
                 automatics.add(grandma);
                 System.out.println("New Grandma added");
 
-                System.out.println("Amount of Grandma's: " + amountOfGrandmas);
+                System.out.println("Amount of Grandma's: " + grandma.getAmountOfGrandmas());
                 System.out.println("Amount of cookies: " + cookieAnoumt);
             } else {
                 System.out.println("Not enough cookies. Click more!!");
@@ -177,18 +173,16 @@ public class Main extends Application {
         });
 
         buttonFarm.setOnAction(event -> {
-            amountOfFarms++;
             Farm farm = new Farm();
+            farm.addFarm();
             if (cookieAnoumt >= farm.getCost()) {
                 perSecond += farm.getMultiplication();
-                perSecond *= 10;
-                perSecond = Math.round(perSecond);
-                perSecond /= 10;
+                roundOf(perSecond);
                 cookieAnoumt -= farm.getCost();
                 automatics.add(farm);
                 System.out.println("New Farm added");
 
-                System.out.println("Amount of Farms: " + amountOfFarms);
+                System.out.println("Amount of Farms: " + farm.getAmountOfFarms());
                 System.out.println("Amount of cookies: " + cookieAnoumt);
             } else {
                 System.out.println("Not enough cookies. Click more!!");
@@ -196,6 +190,12 @@ public class Main extends Application {
             updateDisplay();
         });
     }
+
+
+
+
+
+
 
 
     public void draw(FXGraphics2D graphics) {
