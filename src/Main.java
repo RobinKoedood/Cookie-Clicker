@@ -12,6 +12,7 @@ import Automatic.AutoCursor;
 import Automatic.Automatic;
 import Automatic.Grandma;
 import Automatic.Farm;
+import Automatic.Mine;
 import javafx.application.Application;
 
 import static javafx.application.Application.launch;
@@ -49,6 +50,7 @@ public class Main extends Application {
     private Button buttonCursor;
     private Button buttonGrandma;
     private Button buttonFarm;
+    private Button buttonMine;
 
     private imageState cookieState = Main.imageState.IDLE;
 
@@ -94,8 +96,6 @@ public class Main extends Application {
                     }
                 }
                 updateDisplay();
-                System.out.println("Amount of cookies: " + cookieAnoumt);
-                System.out.println("Per second: " + perSecond);
 //                if (reader.hasNextLine()) {
 //                    cookieAnoumt = Integer.parseInt(reader.nextLine());
 //                }
@@ -121,11 +121,13 @@ public class Main extends Application {
         AutoCursor autoCursor = new AutoCursor();
         Grandma grandma = new Grandma();
         Farm farm = new Farm();
+        Mine mine = new Mine();
         buttonCursor = new Button();
         buttonCursor.setText("Cursor +1" + " Cost = " + autoCursor.getCost());
         buttonGrandma = new Button("Grandma +1" + " Cost = " + grandma.getCost());
         buttonFarm = new Button("Farm +1" + " Cost = " + farm.getCost());
-        vBox.getChildren().addAll(buttonCursor, buttonGrandma, buttonFarm);
+        buttonMine = new Button("Mine +1" + " Cost = " + mine.getCost());
+        vBox.getChildren().addAll(buttonCursor, buttonGrandma, buttonFarm, buttonMine);
 
         getButtonLogics();
 
@@ -133,8 +135,12 @@ public class Main extends Application {
     }
 
     private void getButtonLogics() {
+        AutoCursor autoCursor = new AutoCursor();
+        Grandma grandma = new Grandma();
+        Farm farm = new Farm();
+        Mine mine = new Mine();
+
         buttonCursor.setOnAction(event -> {
-            AutoCursor autoCursor = new AutoCursor();
             autoCursor.addCursor();
             if (cookieAnoumt >= autoCursor.getCost()) {
                 perSecond += autoCursor.getMultiplication();
@@ -142,6 +148,7 @@ public class Main extends Application {
                 cookieAnoumt -= autoCursor.getCost();
                 automatics.add(autoCursor);
                 labelInformation.setText("New Cursor added!" + " Amount of Cursors: " + autoCursor.getAmountOfAutoCursors());
+                System.out.println(autoCursor.getAmountOfAutoCursors());
 
                 System.out.println("Amount of cookies: " + cookieAnoumt);
             } else {
@@ -151,7 +158,6 @@ public class Main extends Application {
         });
 
         buttonGrandma.setOnAction(event -> {
-            Grandma grandma = new Grandma();
             grandma.addGrandma();
             if (cookieAnoumt >= grandma.getCost()) {
                 perSecond += grandma.getMultiplication();
@@ -168,7 +174,6 @@ public class Main extends Application {
         });
 
         buttonFarm.setOnAction(event -> {
-            Farm farm = new Farm();
             farm.addFarm();
             if (cookieAnoumt >= farm.getCost()) {
                 perSecond += farm.getMultiplication();
@@ -183,13 +188,23 @@ public class Main extends Application {
             }
             updateDisplay();
         });
+
+        buttonMine.setOnAction(event -> {
+            mine.addMine();
+            if (cookieAnoumt >= mine.getCost()) {
+                perSecond += mine.getMultiplication();
+                roundOf(perSecond);
+                cookieAnoumt -= mine.getCost();
+                automatics.add(mine);
+                labelInformation.setText("New Mine added!" + " Amount of Mines: " + mine.getAmountOfMines());
+
+                System.out.println("Amount of cookies: " + cookieAnoumt);
+            } else {
+                System.out.println("Not enough cookies. Click more!!");
+            }
+            updateDisplay();
+        });
     }
-
-
-
-
-
-
 
 
     public void draw(FXGraphics2D graphics) {
@@ -232,7 +247,6 @@ public class Main extends Application {
         if (cookie.getEllipse2D().contains(e.getX(), e.getY())) {
             cookieState = imageState.HELD;
             draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
-            System.out.println("Clicked in Circle");
             cookieAnoumt++;
         }
         updateDisplay();
