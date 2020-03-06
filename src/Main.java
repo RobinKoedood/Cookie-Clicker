@@ -13,6 +13,7 @@ import Automatic.Automatic;
 import Automatic.Grandma;
 import Automatic.Farm;
 import Automatic.Mine;
+import com.sun.org.apache.regexp.internal.REDebugCompiler;
 import javafx.application.Application;
 
 import static javafx.application.Application.launch;
@@ -34,7 +35,7 @@ import org.jfree.fx.ResizableCanvas;
 import javax.imageio.ImageIO;
 
 public class Main extends Application {
-    private static int cookieAnoumt = 0;
+    private static long cookieAnoumt = 0;
     private static double perSecond = 0.0;
     private static ResizableCanvas canvas;
     private static ArrayList<Automatic> automatics;
@@ -55,14 +56,23 @@ public class Main extends Application {
     private imageState cookieState = Main.imageState.IDLE;
 
     public enum imageState {IDLE, HOVER, HELD}
+    private BufferedImage total = null;
+    private BufferedImage imageCursorButton = null;
+    private FXGraphics2D fxGraphics2D;
+
+
+    public static void main(String[] args) {
+        launch(Main.class);
+    }
 
     @Override
     public void start(Stage primaryStage) {
         System.out.println("start");
         automatics = new ArrayList<>();
         BorderPane mainPane = new BorderPane();
-        canvas = new ResizableCanvas(g -> draw(g), mainPane);
+        canvas = new ResizableCanvas(g -> onResize(g), mainPane);
         cookie = new Cookie(Color.BLACK, new Ellipse2D.Double(canvas.getWidth() / 2 - 100, canvas.getHeight() / 2 - 100, 200, 200));
+        fxGraphics2D = new FXGraphics2D(canvas.getGraphicsContext2D());
 
         mainPane.setCenter(canvas);
         canvas.setOnMousePressed(e -> mousePressed(e));
@@ -74,7 +84,7 @@ public class Main extends Application {
         labelPerSecond = new Label("Per second : " + perSecond);
         labelInformation = new Label ();
         mainPane.setTop(getVboxAmounts());
-        mainPane.setRight(getAutomatics());
+        //mainPane.setRight(getAutomatics());
 
 
         Scene scene = new Scene(mainPane);
@@ -83,7 +93,7 @@ public class Main extends Application {
 
         primaryStage.getIcons().add(new Image("favicon.png"));
         primaryStage.show();
-        draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+        draw(fxGraphics2D);
 
 
         Timer timerCursor = new Timer();
@@ -95,6 +105,11 @@ public class Main extends Application {
                         cookieAnoumt += automatic.update();
                     }
                 }
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 updateDisplay();
 //                if (reader.hasNextLine()) {
 //                    cookieAnoumt = Integer.parseInt(reader.nextLine());
@@ -102,6 +117,45 @@ public class Main extends Application {
 
             }
         }, 1, 1000);
+    }
+
+    public void draw(FXGraphics2D graphics) {
+        updateDisplay();
+
+        //BackgroundImage backgroundImage = new BackgroundImage(new Image("bgBlue.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        graphics.setTransform(new AffineTransform());
+        graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
+
+        //graphics.draw(cookie.getEllipse2D());
+
+        switch (cookieState) {
+            case IDLE:
+                graphics.drawImage(cookie.getImageIdle(), (int) canvas.getWidth() / 2 - 100, (int) canvas.getHeight() / 2 - 100, 200, 200, null);
+                break;
+            case HOVER:
+                graphics.drawImage(cookie.getImageHover(), (int) canvas.getWidth() / 2 - 100, (int) canvas.getHeight() / 2 - 100, 200, 200, null);
+                break;
+            case HELD:
+                graphics.drawImage(cookie.getImageHeld(), (int) canvas.getWidth() / 2 - 100, (int) canvas.getHeight() / 2 - 100, 200, 200, null);
+                break;
+        }
+    }
+
+    public void init() {
+        try {
+            total = ImageIO.read(getClass().getResource("/bgBlue.png"));
+            imageCursorButton = ImageIO.read(getClass().getResource("/cursorButton.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private void onResize(FXGraphics2D g) {
+        g.setPaint(new TexturePaint(total, new Rectangle2D.Double(canvas.getWidth()/2, canvas.getHeight()/2, canvas.getWidth(), canvas.getHeight())));
+        cookie.setEllipse2D(new Ellipse2D.Double(canvas.getWidth() / 2 - 100, canvas.getHeight() / 2 - 100, 200, 200));
+        draw(g);
     }
 
     public void stop() {
@@ -127,6 +181,7 @@ public class Main extends Application {
         buttonGrandma = new Button("Grandma +1" + " Cost = " + grandma.getCost());
         buttonFarm = new Button("Farm +1" + " Cost = " + farm.getCost());
         buttonMine = new Button("Mine +1" + " Cost = " + mine.getCost());
+
         vBox.getChildren().addAll(buttonCursor, buttonGrandma, buttonFarm, buttonMine);
 
         getButtonLogics();
@@ -141,10 +196,10 @@ public class Main extends Application {
         Mine mine = new Mine();
 
         buttonCursor.setOnAction(event -> {
-            autoCursor.addCursor();
             if (cookieAnoumt >= autoCursor.getCost()) {
+                autoCursor.addCursor();
                 perSecond += autoCursor.getMultiplication();
-                roundOf(perSecond);
+                perSecond = roundOf(perSecond);
                 cookieAnoumt -= autoCursor.getCost();
                 automatics.add(autoCursor);
                 labelInformation.setText("New Cursor added!" + " Amount of Cursors: " + autoCursor.getAmountOfAutoCursors());
@@ -158,10 +213,10 @@ public class Main extends Application {
         });
 
         buttonGrandma.setOnAction(event -> {
-            grandma.addGrandma();
             if (cookieAnoumt >= grandma.getCost()) {
+                grandma.addGrandma();
                 perSecond += grandma.getMultiplication();
-                roundOf(perSecond);
+                perSecond = roundOf(perSecond);
                 cookieAnoumt -= grandma.getCost();
                 automatics.add(grandma);
                 labelInformation.setText("New Grandma added!" + " Amount of Grandma's: " + grandma.getAmountOfGrandmas());
@@ -174,10 +229,10 @@ public class Main extends Application {
         });
 
         buttonFarm.setOnAction(event -> {
-            farm.addFarm();
             if (cookieAnoumt >= farm.getCost()) {
+                farm.addFarm();
                 perSecond += farm.getMultiplication();
-                roundOf(perSecond);
+                perSecond = roundOf(perSecond);
                 cookieAnoumt -= farm.getCost();
                 automatics.add(farm);
                 labelInformation.setText("New farm added!" + " Amount of farms: " + farm.getAmountOfFarms());
@@ -190,10 +245,10 @@ public class Main extends Application {
         });
 
         buttonMine.setOnAction(event -> {
-            mine.addMine();
             if (cookieAnoumt >= mine.getCost()) {
+                mine.addMine();
                 perSecond += mine.getMultiplication();
-                roundOf(perSecond);
+                perSecond = roundOf(perSecond);
                 cookieAnoumt -= mine.getCost();
                 automatics.add(mine);
                 labelInformation.setText("New Mine added!" + " Amount of Mines: " + mine.getAmountOfMines());
@@ -207,46 +262,14 @@ public class Main extends Application {
     }
 
 
-    public void draw(FXGraphics2D graphics) {
-        updateDisplay();
-
-        //BackgroundImage backgroundImage = new BackgroundImage(new Image("bgBlue.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-        graphics.setTransform(new AffineTransform());
-        graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
-
-        BufferedImage total = null;
-        try {
-            total = ImageIO.read(getClass().getResource("/bgBlue.png"));
-            graphics.setPaint(new TexturePaint(total, new Rectangle2D.Double(canvas.getWidth()/2, canvas.getHeight()/2, canvas.getWidth(), canvas.getHeight())));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        cookie.setEllipse2D(new Ellipse2D.Double(canvas.getWidth() / 2 - 100, canvas.getHeight() / 2 - 100, 200, 200));
-        //graphics.draw(cookie.getEllipse2D());
-
-        switch (cookieState) {
-            case IDLE:
-                graphics.drawImage(cookie.getImageIdle(), (int) canvas.getWidth() / 2 - 100, (int) canvas.getHeight() / 2 - 100, 200, 200, null);
-                break;
-            case HOVER:
-                graphics.drawImage(cookie.getImageHover(), (int) canvas.getWidth() / 2 - 100, (int) canvas.getHeight() / 2 - 100, 200, 200, null);
-                break;
-            case HELD:
-                graphics.drawImage(cookie.getImageHeld(), (int) canvas.getWidth() / 2 - 100, (int) canvas.getHeight() / 2 - 100, 200, 200, null);
-                break;
-        }
-    }
 
 
-    public static void main(String[] args) {
-        launch(Main.class);
-    }
+
 
     private void mousePressed(MouseEvent e) {
         if (cookie.getEllipse2D().contains(e.getX(), e.getY())) {
             cookieState = imageState.HELD;
-            draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+            draw(fxGraphics2D);
             cookieAnoumt++;
         }
         updateDisplay();
@@ -258,7 +281,7 @@ public class Main extends Application {
         } else {
             cookieState = imageState.IDLE;
         }
-        draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+        draw(fxGraphics2D);
     }
 
     private void mouseMoved(MouseEvent event) {
@@ -267,7 +290,7 @@ public class Main extends Application {
         } else {
             cookieState = imageState.IDLE;
         }
-        draw(new FXGraphics2D(canvas.getGraphicsContext2D()));
+        draw(fxGraphics2D);
     }
 
     private void updateDisplay() {

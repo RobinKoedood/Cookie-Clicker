@@ -5,6 +5,10 @@ import javafx.scene.control.Button;
 public class Grandma implements Automatic {
     private int updateAmount = 0;
     private int amountOfGrandmas;
+
+    public Grandma() {
+    }
+
     @Override
     public int getCost() {
         return 100;
@@ -33,6 +37,10 @@ public class Grandma implements Automatic {
 
     private Button buttonGrandma (){
         Button button = new Button("Grandma");
+        button.setOnAction(event -> {
+            addGrandma();
+
+        });
         return button;
     }
 

@@ -5,6 +5,9 @@ public class Farm implements Automatic {
     private int updateAmount;
     private int amountOfFarms;
 
+    public Farm() {
+    }
+
     @Override
     public String getName() {
         return "Farm";

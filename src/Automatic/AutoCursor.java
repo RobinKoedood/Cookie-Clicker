@@ -6,6 +6,10 @@ public class AutoCursor implements Automatic {
     private int updateAmount = 0;
     private ArrayList<AutoCursor> autoCursors = new ArrayList<>();
     private int amountOfAutoCursors;
+
+    public AutoCursor() {
+    }
+
     @Override
     public int getCost() {
         return 25;

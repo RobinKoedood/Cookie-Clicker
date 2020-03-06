@@ -1,10 +1,17 @@
 package Automatic;
 
+import java.awt.image.BufferedImage;
+
 public class Mine implements Automatic {
 
     private int updateAmount;
     private int amountOfMines;
+    private BufferedImage image = null;
 
+
+    public Mine() {
+
+    }
 
     @Override
     public String getName() {
