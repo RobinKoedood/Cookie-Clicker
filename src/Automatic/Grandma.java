@@ -6,15 +6,15 @@ public class Grandma implements Automatic {
     private int updateAmount = 0;
     private int amountOfGrandmas;
 
-    private boolean first = true;
+    private int first10 = 0;
 
     public Grandma() {
     }
 
     @Override
     public double getCost() {
-        if (first){
-            first = false;
+        if (first10 < 30){
+            first10++;
             return 100;
         } else {
             double i = 100 * (amountOfGrandmas/10.0);

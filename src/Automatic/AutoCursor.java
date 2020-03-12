@@ -6,7 +6,6 @@ public class AutoCursor implements Automatic {
     private int updateAmount = 0;
     private ArrayList<AutoCursor> autoCursors = new ArrayList<>();
     private int amountOfAutoCursors;
-    private boolean first = true;
     int first10 = 0;
 
     public AutoCursor() {
@@ -14,7 +13,7 @@ public class AutoCursor implements Automatic {
 
     @Override
     public double getCost() {
-        if (first10 < 10){
+        if (first10 < 30){
             first10++;
             return 25.0;
         }

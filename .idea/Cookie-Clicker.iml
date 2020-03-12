@@ -22,5 +22,6 @@
     <orderEntry type="library" name="fxgraphics2d-1.9" level="project" />
     <orderEntry type="library" name="edu-test-utils-0.4.2" level="project" />
     <orderEntry type="library" name="tmc-junit-runner" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>

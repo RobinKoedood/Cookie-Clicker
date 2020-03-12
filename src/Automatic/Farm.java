@@ -4,7 +4,7 @@ public class Farm implements Automatic {
 
     private int updateAmount;
     private int amountOfFarms;
-    private boolean first = true;
+    private int first10 = 0;
 
     public Farm() {
     }
@@ -16,8 +16,8 @@ public class Farm implements Automatic {
 
     @Override
     public double getCost() {
-        if (first){
-            first = false;
+        if (first10 < 30){
+            first10++;
             return 250;
         } else {
             double i = 250 * (amountOfFarms/10.0);

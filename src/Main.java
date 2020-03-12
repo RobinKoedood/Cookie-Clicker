@@ -40,13 +40,10 @@ public class Main extends Application {
     private static ResizableCanvas canvas;
     private static ArrayList<Automatic> automatics;
     private Cookie cookie = null;
-    private Scanner reader = new Scanner(System.in);
 
     private Label labelAmount;
     private Label labelPerSecond;
     private Label labelInformation;
-
-    private double multiplicationCursor;
 
     private Button buttonCursor;
     private Button buttonGrandma;
@@ -115,10 +112,6 @@ public class Main extends Application {
                     e.printStackTrace();
                 }
                 updateDisplay();
-//                if (reader.hasNextLine()) {
-//                    cookieAnoumt = Integer.parseInt(reader.nextLine());
-//                }
-
             }
         }, 1, 1000);
     }
@@ -126,11 +119,8 @@ public class Main extends Application {
     public void draw(FXGraphics2D graphics) {
         updateDisplay();
 
-        //BackgroundImage backgroundImage = new BackgroundImage(new Image("bgBlue.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         graphics.setTransform(new AffineTransform());
         graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
-
-        //graphics.draw(cookie.getEllipse2D());
 
         switch (cookieState) {
             case IDLE:
