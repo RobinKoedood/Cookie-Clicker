@@ -60,6 +60,10 @@ public class Main extends Application {
     private BufferedImage imageCursorButton = null;
     private FXGraphics2D fxGraphics2D;
 
+    private AutoCursor autoCursor;
+    private Grandma grandma;
+    private Farm farm;
+    private Mine mine;
 
     public static void main(String[] args) {
         launch(Main.class);
@@ -84,7 +88,7 @@ public class Main extends Application {
         labelPerSecond = new Label("Per second : " + perSecond);
         labelInformation = new Label ();
         mainPane.setTop(getVboxAmounts());
-        //mainPane.setRight(getAutomatics());
+        mainPane.setRight(getAutomatics());
 
 
         Scene scene = new Scene(mainPane);
@@ -172,15 +176,14 @@ public class Main extends Application {
 
     private Node getAutomatics() {
         VBox vBox = new VBox();
-        AutoCursor autoCursor = new AutoCursor();
-        Grandma grandma = new Grandma();
-        Farm farm = new Farm();
-        Mine mine = new Mine();
-        buttonCursor = new Button();
-        buttonCursor.setText("Cursor +1" + " Cost = " + autoCursor.getCost());
-        buttonGrandma = new Button("Grandma +1" + " Cost = " + grandma.getCost());
-        buttonFarm = new Button("Farm +1" + " Cost = " + farm.getCost());
-        buttonMine = new Button("Mine +1" + " Cost = " + mine.getCost());
+        autoCursor = new AutoCursor();
+        grandma = new Grandma();
+        farm = new Farm();
+        mine = new Mine();
+        buttonCursor = new Button(autoCursor.getName() + " +1" + " Cost = " + autoCursor.getCost());
+        buttonGrandma = new Button( grandma.getName() +  " +1" + " Cost = " + grandma.getCost());
+        buttonFarm = new Button( farm.getName() + " +1" + " Cost = " + farm.getCost());
+        buttonMine = new Button( mine.getName() +  " +1" + " Cost = " + mine.getCost());
 
         vBox.getChildren().addAll(buttonCursor, buttonGrandma, buttonFarm, buttonMine);
 
@@ -190,72 +193,75 @@ public class Main extends Application {
     }
 
     private void getButtonLogics() {
-        AutoCursor autoCursor = new AutoCursor();
-        Grandma grandma = new Grandma();
-        Farm farm = new Farm();
-        Mine mine = new Mine();
+        autoCursor = new AutoCursor();
+        grandma = new Grandma();
+        farm = new Farm();
+        mine = new Mine();
 
         buttonCursor.setOnAction(event -> {
             if (cookieAnoumt >= autoCursor.getCost()) {
-                autoCursor.addCursor();
                 perSecond += autoCursor.getMultiplication();
                 perSecond = roundOf(perSecond);
                 cookieAnoumt -= autoCursor.getCost();
+                autoCursor.addCursor();
+                buttonCursor.setText( autoCursor.getName() + " +1 " + "Cost = " + autoCursor.getCost());
                 automatics.add(autoCursor);
                 labelInformation.setText("New Cursor added!" + " Amount of Cursors: " + autoCursor.getAmountOfAutoCursors());
-                System.out.println(autoCursor.getAmountOfAutoCursors());
 
                 System.out.println("Amount of cookies: " + cookieAnoumt);
             } else {
-                System.out.println("Not enough cookies. Click more!!");
+                labelInformation.setText("Not enough cookies. Click more!!");
             }
             updateDisplay();
         });
 
         buttonGrandma.setOnAction(event -> {
             if (cookieAnoumt >= grandma.getCost()) {
-                grandma.addGrandma();
                 perSecond += grandma.getMultiplication();
                 perSecond = roundOf(perSecond);
                 cookieAnoumt -= grandma.getCost();
+                grandma.addGrandma();
+                buttonGrandma.setText( grandma.getName() + " +1 " + "Cost = " + grandma.getCost());
                 automatics.add(grandma);
                 labelInformation.setText("New Grandma added!" + " Amount of Grandma's: " + grandma.getAmountOfGrandmas());
 
                 System.out.println("Amount of cookies: " + cookieAnoumt);
             } else {
-                System.out.println("Not enough cookies. Click more!!");
+                labelInformation.setText("Not enough cookies. Click more!!");
             }
             updateDisplay();
         });
 
         buttonFarm.setOnAction(event -> {
             if (cookieAnoumt >= farm.getCost()) {
-                farm.addFarm();
                 perSecond += farm.getMultiplication();
                 perSecond = roundOf(perSecond);
                 cookieAnoumt -= farm.getCost();
+                farm.addFarm();
+                buttonFarm.setText( farm.getName() + " +1 " + "Cost = " + farm.getCost());
                 automatics.add(farm);
                 labelInformation.setText("New farm added!" + " Amount of farms: " + farm.getAmountOfFarms());
 
                 System.out.println("Amount of cookies: " + cookieAnoumt);
             } else {
-                System.out.println("Not enough cookies. Click more!!");
+                labelInformation.setText("Not enough cookies. Click more!!");
             }
             updateDisplay();
         });
 
         buttonMine.setOnAction(event -> {
             if (cookieAnoumt >= mine.getCost()) {
-                mine.addMine();
                 perSecond += mine.getMultiplication();
                 perSecond = roundOf(perSecond);
                 cookieAnoumt -= mine.getCost();
+                mine.addMine();
+                buttonMine.setText( mine.getName() + " +1 " + "Cost = " + mine.getCost());
                 automatics.add(mine);
                 labelInformation.setText("New Mine added!" + " Amount of Mines: " + mine.getAmountOfMines());
 
                 System.out.println("Amount of cookies: " + cookieAnoumt);
             } else {
-                System.out.println("Not enough cookies. Click more!!");
+                labelInformation.setText("Not enough cookies. Click more!!");
             }
             updateDisplay();
         });

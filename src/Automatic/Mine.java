@@ -7,6 +7,7 @@ public class Mine implements Automatic {
     private int updateAmount;
     private int amountOfMines;
     private BufferedImage image = null;
+    private boolean first = true;
 
 
     public Mine() {
@@ -19,8 +20,16 @@ public class Mine implements Automatic {
     }
 
     @Override
-    public int getCost() {
-        return 1000;
+    public double getCost() {
+        if (first){
+            first = false;
+            return 1000;
+        } else {
+            double i = 1000 * (amountOfMines/10.0);
+            Math.round(i);
+            return i;
+        }
+
     }
 
     @Override

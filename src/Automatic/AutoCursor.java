@@ -6,13 +6,25 @@ public class AutoCursor implements Automatic {
     private int updateAmount = 0;
     private ArrayList<AutoCursor> autoCursors = new ArrayList<>();
     private int amountOfAutoCursors;
+    private boolean first = true;
+    int first10 = 0;
 
     public AutoCursor() {
     }
 
     @Override
-    public int getCost() {
-        return 25;
+    public double getCost() {
+        if (first10 < 10){
+            first10++;
+            return 25.0;
+        }
+        if (first10 >= 10){
+            double i = 25 * (amountOfAutoCursors / 10.0);
+            Math.round(i);
+            return i;
+        }
+        else return 0;
+
     }
 
     @Override

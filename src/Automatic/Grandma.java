@@ -6,12 +6,22 @@ public class Grandma implements Automatic {
     private int updateAmount = 0;
     private int amountOfGrandmas;
 
+    private boolean first = true;
+
     public Grandma() {
     }
 
     @Override
-    public int getCost() {
-        return 100;
+    public double getCost() {
+        if (first){
+            first = false;
+            return 100;
+        } else {
+            double i = 100 * (amountOfGrandmas/10.0);
+            Math.round(i);
+            return i;
+        }
+
     }
 
     @Override
