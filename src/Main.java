@@ -40,6 +40,7 @@ public class Main extends Application {
     private static ResizableCanvas canvas;
     private static ArrayList<Automatic> automatics;
     private Cookie cookie = null;
+    private Rectangle2D rectangle2DCursor = null;
 
     private Label labelAmount;
     private Label labelPerSecond;
@@ -73,6 +74,7 @@ public class Main extends Application {
         BorderPane mainPane = new BorderPane();
         canvas = new ResizableCanvas(g -> onResize(g), mainPane);
         cookie = new Cookie(Color.BLACK, new Ellipse2D.Double(canvas.getWidth() / 2 - 100, canvas.getHeight() / 2 - 100, 200, 200));
+        rectangle2DCursor = new Rectangle2D.Double(100,100,100,100);
         fxGraphics2D = new FXGraphics2D(canvas.getGraphicsContext2D());
 
         mainPane.setCenter(canvas);
@@ -121,6 +123,10 @@ public class Main extends Application {
 
         graphics.setTransform(new AffineTransform());
         graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
+        //graphics.drawImage(imageCursorButton, 510, 0, null);
+//        graphics.setColor(Color.WHITE);
+//        graphics.draw(rectangle2DCursor);
+//        graphics.fill(rectangle2DCursor);
 
         switch (cookieState) {
             case IDLE:
@@ -267,6 +273,26 @@ public class Main extends Application {
             cookieState = imageState.HELD;
             draw(fxGraphics2D);
             cookieAnoumt++;
+        }
+        /*if (rectangle2DCursor.contains(e.getX(), e.getY())){
+            getNewCursor();
+        }*/
+        updateDisplay();
+    }
+
+    private void getNewCursor() {
+        if (cookieAnoumt >= autoCursor.getCost()) {
+            perSecond += autoCursor.getMultiplication();
+            perSecond = roundOf(perSecond);
+            cookieAnoumt -= autoCursor.getCost();
+            autoCursor.addCursor();
+            buttonCursor.setText( autoCursor.getName() + " +1 " + "Cost = " + autoCursor.getCost());
+            automatics.add(autoCursor);
+            labelInformation.setText("New Cursor added!" + " Amount of Cursors: " + autoCursor.getAmountOfAutoCursors());
+
+            System.out.println("Amount of cookies: " + cookieAnoumt);
+        } else {
+            labelInformation.setText("Not enough cookies. Click more!!");
         }
         updateDisplay();
     }
