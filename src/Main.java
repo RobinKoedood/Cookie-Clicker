@@ -30,6 +30,7 @@ import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.*;
 
 public class Main extends Application {
     private static long cookieAnoumt = 0;
@@ -148,9 +149,23 @@ public class Main extends Application {
 
     public void init() {
         try {
+            AudioInputStream audioIn =
+                    AudioSystem.getAudioInputStream (getClass().getResource("/sound/music.wav")); //
+            // inputting sound
+            Clip clip = AudioSystem.getClip(); // inputting sound
+            clip.open (audioIn); // inputting sound
+            FloatControl gainControl =
+                    (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(-20.0f); // Reduce volume by 20 decibels.
+            clip.start();
+            clip.loop(100);
             total = ImageIO.read(getClass().getResource("/bgBlue.png"));
             imageCursorButton = ImageIO.read(getClass().getResource("/cursorButton.png"));
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (LineUnavailableException e) {
             e.printStackTrace();
         }
 
