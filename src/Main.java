@@ -8,11 +8,8 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import Automatic.AutoCursor;
-import Automatic.Automatic;
-import Automatic.Grandma;
-import Automatic.Farm;
-import Automatic.Mine;
+import Automatic.*;
+
 import com.sun.org.apache.regexp.internal.REDebugCompiler;
 import javafx.application.Application;
 
@@ -50,6 +47,7 @@ public class Main extends Application {
     private Button buttonGrandma;
     private Button buttonFarm;
     private Button buttonMine;
+    private Button buttonFactory;
 
     private imageState cookieState = Main.imageState.IDLE;
 
@@ -58,10 +56,11 @@ public class Main extends Application {
     private BufferedImage imageCursorButton = null;
     private FXGraphics2D fxGraphics2D;
 
-    private AutoCursor autoCursor;
-    private Grandma grandma;
-    private Farm farm;
-    private Mine mine;
+    private AutoCursor autoCursor = new AutoCursor();
+    private Grandma grandma = new Grandma();
+    private Farm farm = new Farm();
+    private Mine mine = new Mine();
+    private Factory factory = new Factory();
 
     public static void main(String[] args) {
         launch(Main.class);
@@ -115,7 +114,7 @@ public class Main extends Application {
                 }
                 updateDisplay();
             }
-        }, 1, 1000);
+        }, 1, 10);
     }
 
     public void draw(FXGraphics2D graphics) {
@@ -172,16 +171,14 @@ public class Main extends Application {
 
     private Node getAutomatics() {
         VBox vBox = new VBox();
-        autoCursor = new AutoCursor();
-        grandma = new Grandma();
-        farm = new Farm();
-        mine = new Mine();
+
         buttonCursor = new Button(autoCursor.getName() + " +1" + " Cost = " + autoCursor.getCost());
         buttonGrandma = new Button( grandma.getName() +  " +1" + " Cost = " + grandma.getCost());
         buttonFarm = new Button( farm.getName() + " +1" + " Cost = " + farm.getCost());
         buttonMine = new Button( mine.getName() +  " +1" + " Cost = " + mine.getCost());
+        buttonFactory = new Button( factory.getName() +  " +1" + " Cost = " + factory.getCost());
 
-        vBox.getChildren().addAll(buttonCursor, buttonGrandma, buttonFarm, buttonMine);
+        vBox.getChildren().addAll(buttonCursor, buttonGrandma, buttonFarm, buttonMine, buttonFactory);
 
         getButtonLogics();
 
@@ -189,11 +186,6 @@ public class Main extends Application {
     }
 
     private void getButtonLogics() {
-        autoCursor = new AutoCursor();
-        grandma = new Grandma();
-        farm = new Farm();
-        mine = new Mine();
-
         buttonCursor.setOnAction(event -> {
             if (cookieAnoumt >= autoCursor.getCost()) {
                 perSecond += autoCursor.getMultiplication();
@@ -254,6 +246,23 @@ public class Main extends Application {
                 buttonMine.setText( mine.getName() + " +1 " + "Cost = " + mine.getCost());
                 automatics.add(mine);
                 labelInformation.setText("New Mine added!" + " Amount of Mines: " + mine.getAmountOfMines());
+
+                System.out.println("Amount of cookies: " + cookieAnoumt);
+            } else {
+                labelInformation.setText("Not enough cookies. Click more!!");
+            }
+            updateDisplay();
+        });
+
+        buttonFactory.setOnAction(event -> {
+            if (cookieAnoumt >= factory.getCost()) {
+                perSecond += factory.getMultiplication();
+                perSecond = roundOf(perSecond);
+                cookieAnoumt -= factory.getCost();
+                factory.addFactory();
+                buttonFactory.setText( factory.getName() + " +1 " + "Cost = " + factory.getCost());
+                automatics.add(factory);
+                labelInformation.setText("New Factory added!" + " Amount of Factories: " + factory.getAmountOfFactories());
 
                 System.out.println("Amount of cookies: " + cookieAnoumt);
             } else {
