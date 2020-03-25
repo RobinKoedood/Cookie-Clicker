@@ -48,6 +48,8 @@ public class Main extends Application {
     private Button buttonFarm;
     private Button buttonMine;
     private Button buttonFactory;
+    private Button buttonBank;
+    private Button buttonLab;
 
     private imageState cookieState = Main.imageState.IDLE;
 
@@ -61,6 +63,8 @@ public class Main extends Application {
     private Farm farm = new Farm();
     private Mine mine = new Mine();
     private Factory factory = new Factory();
+    private Bank bank = new Bank();
+    private Lab lab = new Lab();
 
     public static void main(String[] args) {
         launch(Main.class);
@@ -177,8 +181,10 @@ public class Main extends Application {
         buttonFarm = new Button( farm.getName() + " +1" + " Cost = " + farm.getCost());
         buttonMine = new Button( mine.getName() +  " +1" + " Cost = " + mine.getCost());
         buttonFactory = new Button( factory.getName() +  " +1" + " Cost = " + factory.getCost());
+        buttonBank = new Button( bank.getName() +  " +1" + " Cost = " + bank.getCost());
+        buttonLab = new Button( lab.getName() +  " +1" + " Cost = " + lab.getCost());
 
-        vBox.getChildren().addAll(buttonCursor, buttonGrandma, buttonFarm, buttonMine, buttonFactory);
+        vBox.getChildren().addAll(buttonCursor, buttonGrandma, buttonFarm, buttonMine, buttonFactory, buttonBank, buttonLab);
 
         getButtonLogics();
 
@@ -263,6 +269,40 @@ public class Main extends Application {
                 buttonFactory.setText( factory.getName() + " +1 " + "Cost = " + factory.getCost());
                 automatics.add(factory);
                 labelInformation.setText("New Factory added!" + " Amount of Factories: " + factory.getAmountOfFactories());
+
+                System.out.println("Amount of cookies: " + cookieAnoumt);
+            } else {
+                labelInformation.setText("Not enough cookies. Click more!!");
+            }
+            updateDisplay();
+        });
+
+        buttonBank.setOnAction(event -> {
+            if (cookieAnoumt >= bank.getCost()) {
+                perSecond += bank.getMultiplication();
+                perSecond = roundOf(perSecond);
+                cookieAnoumt -= bank.getCost();
+                bank.addBank();
+                buttonBank.setText( bank.getName() + " +1 " + "Cost = " + bank.getCost());
+                automatics.add(bank);
+                labelInformation.setText("New Bank added!" + " Amount of Banks: " + bank.getAmountOfBanks());
+
+                System.out.println("Amount of cookies: " + cookieAnoumt);
+            } else {
+                labelInformation.setText("Not enough cookies. Click more!!");
+            }
+            updateDisplay();
+        });
+
+        buttonLab.setOnAction(event -> {
+            if (cookieAnoumt >= lab.getCost()) {
+                perSecond += lab.getMultiplication();
+                perSecond = roundOf(perSecond);
+                cookieAnoumt -= lab.getCost();
+                lab.addLab();
+                buttonLab.setText( lab.getName() + " +1 " + "Cost = " + lab.getCost());
+                automatics.add(lab);
+                labelInformation.setText("New Lab added!" + " Amount of Labs: " + lab.getAmountOfLabs());
 
                 System.out.println("Amount of cookies: " + cookieAnoumt);
             } else {
