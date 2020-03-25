@@ -20,14 +20,13 @@ public class Mine implements Automatic {
     }
 
     @Override
-    public double getCost() {
+    public int getCost() {
         if (first10 < 30){
             first10++;
             return 1000;
         } else {
             double i = 1000 * (amountOfMines/10.0);
-            Math.round(i);
-            return i;
+            return (int) i;
         }
 
     }

@@ -15,14 +15,13 @@ public class Lab implements Automatic {
     }
 
     @Override
-    public double getCost() {
+    public int getCost() {
         if (first10 < 30){
             first10++;
             return 10000;
         } else {
             double i = 10000 * (amountOfLabs/10.0);
-            Math.round(i);
-            return i;
+            return (int)i;
         }
     }
 

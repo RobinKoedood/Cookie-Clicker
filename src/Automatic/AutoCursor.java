@@ -12,17 +12,14 @@ public class AutoCursor implements Automatic {
     }
 
     @Override
-    public double getCost() {
+    public int getCost() {
         if (first10 < 30){
             first10++;
-            return 25.0;
+            return 25;
+        } else {
+            double i = 25 * (amountOfAutoCursors/10.0);
+            return (int) i;
         }
-        if (first10 >= 10){
-            double i = 25 * (amountOfAutoCursors / 10.0);
-            Math.round(i);
-            return i;
-        }
-        else return 0;
 
     }
 

@@ -5,21 +5,19 @@ import javafx.scene.control.Button;
 public class Grandma implements Automatic {
     private int updateAmount = 0;
     private int amountOfGrandmas;
-
     private int first10 = 0;
 
     public Grandma() {
     }
 
     @Override
-    public double getCost() {
+    public int getCost() {
         if (first10 < 30){
             first10++;
             return 100;
         } else {
             double i = 100 * (amountOfGrandmas/10.0);
-            Math.round(i);
-            return i;
+            return (int) i;
         }
 
     }
@@ -53,8 +51,7 @@ public class Grandma implements Automatic {
         });
         return button;
     }
-
-    public void addGrandma(){
+    public void addGrandma() {
         amountOfGrandmas++;
     }
 

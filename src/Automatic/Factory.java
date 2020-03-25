@@ -15,14 +15,13 @@ public class Factory implements Automatic {
     }
 
     @Override
-    public double getCost() {
+    public int getCost() {
         if (first10 < 30){
             first10++;
             return 2500;
         } else {
             double i = 2500 * (amountOfFactories/10.0);
-            Math.round(i);
-            return i;
+            return (int) i;
         }
     }
 

@@ -126,6 +126,8 @@ public class Main extends Application {
 
         graphics.setTransform(new AffineTransform());
         graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
+
+
         //graphics.drawImage(imageCursorButton, 510, 0, null);
 //        graphics.setColor(Color.WHITE);
 //        graphics.draw(rectangle2DCursor);

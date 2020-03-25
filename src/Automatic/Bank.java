@@ -15,14 +15,13 @@ public class Bank implements Automatic {
     }
 
     @Override
-    public double getCost() {
+    public int getCost() {
         if (first10 < 30){
             first10++;
             return 5000;
         } else {
             double i = 5000 * (amountOfBanks/10.0);
-            Math.round(i);
-            return i;
+            return (int) i;
         }
     }
 

@@ -15,14 +15,13 @@ public class Farm implements Automatic {
     }
 
     @Override
-    public double getCost() {
+    public int getCost() {
         if (first10 < 30){
             first10++;
             return 250;
         } else {
             double i = 250 * (amountOfFarms/10.0);
-            Math.round(i);
-            return i;
+            return (int)i;
         }
 
     }

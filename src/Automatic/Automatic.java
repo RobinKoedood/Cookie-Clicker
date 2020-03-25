@@ -3,7 +3,7 @@ package Automatic;
 public interface Automatic {
 
     String getName();
-    double getCost();
+    int getCost();
     double getMultiplication();
     int update();
 }
