@@ -16,7 +16,7 @@ public class Lab implements Automatic {
 
     @Override
     public int getCost() {
-        if (first10 < 30){
+        if (first10 < 40){
             first10++;
             return 10000;
         } else {

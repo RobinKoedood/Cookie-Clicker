@@ -16,7 +16,7 @@ public class Bank implements Automatic {
 
     @Override
     public int getCost() {
-        if (first10 < 30){
+        if (first10 < 40){
             first10++;
             return 5000;
         } else {

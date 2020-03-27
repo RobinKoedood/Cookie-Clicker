@@ -1,30 +1,29 @@
-
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import Automatic.*;
 
-import com.sun.org.apache.regexp.internal.REDebugCompiler;
 import javafx.application.Application;
 
 import static javafx.application.Application.launch;
 
 import javafx.application.Platform;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
@@ -38,7 +37,6 @@ public class Main extends Application {
     private static ResizableCanvas canvas;
     private static ArrayList<Automatic> automatics;
     private Cookie cookie = null;
-    private Rectangle2D rectangle2DCursor = null;
 
     private Label labelAmount;
     private Label labelPerSecond;
@@ -78,7 +76,6 @@ public class Main extends Application {
         BorderPane mainPane = new BorderPane();
         canvas = new ResizableCanvas(g -> onResize(g), mainPane);
         cookie = new Cookie(Color.BLACK, new Ellipse2D.Double(canvas.getWidth() / 2 - 100, canvas.getHeight() / 2 - 100, 200, 200));
-        rectangle2DCursor = new Rectangle2D.Double(100,100,100,100);
         fxGraphics2D = new FXGraphics2D(canvas.getGraphicsContext2D());
 
         mainPane.setCenter(canvas);
@@ -93,8 +90,23 @@ public class Main extends Application {
         mainPane.setTop(getVboxAmounts());
         mainPane.setRight(getAutomatics());
 
+        Menu menu = new Menu("Game");
+        MenuItem menuSave = new MenuItem("Save");
+        MenuItem menuQuit = new MenuItem("Quit");
 
-        Scene scene = new Scene(mainPane);
+        menuQuit.setOnAction(event -> stop());
+
+        menuSave.setOnAction(event -> save("savefile.txt"));
+
+        menu.getItems().addAll(menuSave, menuQuit);
+
+        MenuBar menuBar = new MenuBar();
+        menuBar.getMenus().addAll(menu);
+
+        VBox vBox = new VBox();
+        vBox.getChildren().addAll(menuBar, mainPane);
+
+        Scene scene = new Scene(vBox);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Cookie Clicker");
 
@@ -117,22 +129,17 @@ public class Main extends Application {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                updateDisplay();
+                update();
             }
         }, 1, 10);
     }
 
     public void draw(FXGraphics2D graphics) {
-        updateDisplay();
+        update();
 
         graphics.setTransform(new AffineTransform());
         graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
 
-
-        //graphics.drawImage(imageCursorButton, 510, 0, null);
-//        graphics.setColor(Color.WHITE);
-//        graphics.draw(rectangle2DCursor);
-//        graphics.fill(rectangle2DCursor);
 
         switch (cookieState) {
             case IDLE:
@@ -144,6 +151,19 @@ public class Main extends Application {
             case HELD:
                 graphics.drawImage(cookie.getImageHeld(), (int) canvas.getWidth() / 2 - 100, (int) canvas.getHeight() / 2 - 100, 200, 200, null);
                 break;
+        }
+    }
+    private void update() {
+        try {
+            Platform.runLater(() -> {
+                        labelAmount.setText("Amount of cookies: " + cookieAnoumt);
+                        labelPerSecond.setText("Per second: " + perSecond);
+
+                    }
+            );
+
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
 
@@ -159,6 +179,9 @@ public class Main extends Application {
             gainControl.setValue(-20.0f); // Reduce volume by 20 decibels.
             clip.start();
             clip.loop(100);
+
+            readSaveFile("savefile");
+
             total = ImageIO.read(getClass().getResource("/bgBlue.png"));
             imageCursorButton = ImageIO.read(getClass().getResource("/cursorButton.png"));
         } catch (IOException e) {
@@ -223,7 +246,7 @@ public class Main extends Application {
             } else {
                 labelInformation.setText("Not enough cookies. Click more!!");
             }
-            updateDisplay();
+            update();
         });
 
         buttonGrandma.setOnAction(event -> {
@@ -240,7 +263,7 @@ public class Main extends Application {
             } else {
                 labelInformation.setText("Not enough cookies. Click more!!");
             }
-            updateDisplay();
+            update();
         });
 
         buttonFarm.setOnAction(event -> {
@@ -257,7 +280,7 @@ public class Main extends Application {
             } else {
                 labelInformation.setText("Not enough cookies. Click more!!");
             }
-            updateDisplay();
+            update();
         });
 
         buttonMine.setOnAction(event -> {
@@ -274,7 +297,7 @@ public class Main extends Application {
             } else {
                 labelInformation.setText("Not enough cookies. Click more!!");
             }
-            updateDisplay();
+            update();
         });
 
         buttonFactory.setOnAction(event -> {
@@ -291,7 +314,7 @@ public class Main extends Application {
             } else {
                 labelInformation.setText("Not enough cookies. Click more!!");
             }
-            updateDisplay();
+            update();
         });
 
         buttonBank.setOnAction(event -> {
@@ -308,7 +331,7 @@ public class Main extends Application {
             } else {
                 labelInformation.setText("Not enough cookies. Click more!!");
             }
-            updateDisplay();
+            update();
         });
 
         buttonLab.setOnAction(event -> {
@@ -325,13 +348,18 @@ public class Main extends Application {
             } else {
                 labelInformation.setText("Not enough cookies. Click more!!");
             }
-            updateDisplay();
+            update();
         });
     }
 
+    public void save(String itemfile){
 
+    }
 
+    public static Automatic readSaveFile(String infile) {
 
+        return null;
+    }
 
 
     private void mousePressed(MouseEvent e) {
@@ -340,27 +368,7 @@ public class Main extends Application {
             draw(fxGraphics2D);
             cookieAnoumt++;
         }
-        /*if (rectangle2DCursor.contains(e.getX(), e.getY())){
-            getNewCursor();
-        }*/
-        updateDisplay();
-    }
-
-    private void getNewCursor() {
-        if (cookieAnoumt >= autoCursor.getCost()) {
-            perSecond += autoCursor.getMultiplication();
-            perSecond = roundOf(perSecond);
-            cookieAnoumt -= autoCursor.getCost();
-            autoCursor.addCursor();
-            buttonCursor.setText( autoCursor.getName() + " +1 " + "Cost = " + autoCursor.getCost());
-            automatics.add(autoCursor);
-            labelInformation.setText("New Cursor added!" + " Amount of Cursors: " + autoCursor.getAmountOfAutoCursors());
-
-            System.out.println("Amount of cookies: " + cookieAnoumt);
-        } else {
-            labelInformation.setText("Not enough cookies. Click more!!");
-        }
-        updateDisplay();
+        update();
     }
 
     private void mouseReleased(MouseEvent e) {
@@ -380,21 +388,6 @@ public class Main extends Application {
         }
         draw(fxGraphics2D);
     }
-
-    private void updateDisplay() {
-        try {
-            Platform.runLater(() -> {
-                        labelAmount.setText("Amount of cookies: " + cookieAnoumt);
-                        labelPerSecond.setText("Per second: " + perSecond);
-
-                    }
-            );
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
 
     private double roundOf(double perSecond) {
         perSecond *= 10;
