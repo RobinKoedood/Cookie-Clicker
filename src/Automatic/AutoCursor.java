@@ -4,21 +4,22 @@ import java.util.ArrayList;
 
 public class AutoCursor implements Automatic {
     private int updateAmount = 0;
-    private ArrayList<AutoCursor> autoCursors = new ArrayList<>();
+    private int moreExpensive = 0;
     private int amountOfAutoCursors;
-    int first10 = 0;
+    private int first10 = 0;
+    private int called = 0;
 
     public AutoCursor() {
     }
 
     @Override
     public int getCost() {
-        if (first10 < 40){
+        if (first10 < 21){
             first10++;
             return 25;
         } else {
-            double i = 25 * (amountOfAutoCursors/10.0);
-            return (int) i;
+                double i = 25 * ((amountOfAutoCursors/10.0));
+                return (int) i;
         }
 
     }

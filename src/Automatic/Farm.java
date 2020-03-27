@@ -16,7 +16,7 @@ public class Farm implements Automatic {
 
     @Override
     public int getCost() {
-        if (first10 < 40){
+        if (first10 < 21){
             first10++;
             return 250;
         } else {

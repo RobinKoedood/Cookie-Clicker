@@ -233,7 +233,7 @@ public class Main extends Application {
 
     private void getButtonLogics() {
         buttonCursor.setOnAction(event -> {
-            if (cookieAnoumt >= autoCursor.getCost()) {
+            if (cookieAnoumt >= 25) {
                 perSecond += autoCursor.getMultiplication();
                 perSecond = roundOf(perSecond);
                 cookieAnoumt -= autoCursor.getCost();
@@ -250,7 +250,7 @@ public class Main extends Application {
         });
 
         buttonGrandma.setOnAction(event -> {
-            if (cookieAnoumt >= grandma.getCost()) {
+            if (cookieAnoumt >= 100) {
                 perSecond += grandma.getMultiplication();
                 perSecond = roundOf(perSecond);
                 cookieAnoumt -= grandma.getCost();
@@ -267,7 +267,7 @@ public class Main extends Application {
         });
 
         buttonFarm.setOnAction(event -> {
-            if (cookieAnoumt >= farm.getCost()) {
+            if (cookieAnoumt >= 250) {
                 perSecond += farm.getMultiplication();
                 perSecond = roundOf(perSecond);
                 cookieAnoumt -= farm.getCost();
@@ -284,7 +284,7 @@ public class Main extends Application {
         });
 
         buttonMine.setOnAction(event -> {
-            if (cookieAnoumt >= mine.getCost()) {
+            if (cookieAnoumt >= 1000) {
                 perSecond += mine.getMultiplication();
                 perSecond = roundOf(perSecond);
                 cookieAnoumt -= mine.getCost();
@@ -301,7 +301,7 @@ public class Main extends Application {
         });
 
         buttonFactory.setOnAction(event -> {
-            if (cookieAnoumt >= factory.getCost()) {
+            if (cookieAnoumt >= 2500) {
                 perSecond += factory.getMultiplication();
                 perSecond = roundOf(perSecond);
                 cookieAnoumt -= factory.getCost();
@@ -318,7 +318,7 @@ public class Main extends Application {
         });
 
         buttonBank.setOnAction(event -> {
-            if (cookieAnoumt >= bank.getCost()) {
+            if (cookieAnoumt >= 5000) {
                 perSecond += bank.getMultiplication();
                 perSecond = roundOf(perSecond);
                 cookieAnoumt -= bank.getCost();
@@ -335,7 +335,7 @@ public class Main extends Application {
         });
 
         buttonLab.setOnAction(event -> {
-            if (cookieAnoumt >= lab.getCost()) {
+            if (cookieAnoumt >= 10000) {
                 perSecond += lab.getMultiplication();
                 perSecond = roundOf(perSecond);
                 cookieAnoumt -= lab.getCost();
