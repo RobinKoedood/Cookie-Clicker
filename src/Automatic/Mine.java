@@ -6,7 +6,6 @@ public class Mine implements Automatic {
 
     private int updateAmount;
     private int amountOfMines;
-    private BufferedImage image = null;
     private int first10 = 0;
 
 

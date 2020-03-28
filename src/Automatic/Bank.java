@@ -6,7 +6,6 @@ public class Bank implements Automatic {
 
     private int updateAmount;
     private int amountOfBanks;
-    private BufferedImage image = null;
     private int first10 = 0;
 
     @Override

@@ -4,10 +4,8 @@ import java.util.ArrayList;
 
 public class AutoCursor implements Automatic {
     private int updateAmount = 0;
-    private int moreExpensive = 0;
     private int amountOfAutoCursors;
     private int first10 = 0;
-    private int called = 0;
 
     public AutoCursor() {
     }

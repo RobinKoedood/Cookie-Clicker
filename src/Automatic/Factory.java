@@ -6,7 +6,6 @@ public class Factory implements Automatic {
 
     private int updateAmount;
     private int amountOfFactories;
-    private BufferedImage image = null;
     private int first10 = 0;
 
     @Override

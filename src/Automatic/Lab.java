@@ -6,7 +6,6 @@ public class Lab implements Automatic {
 
     private int updateAmount;
     private int amountOfLabs;
-    private BufferedImage image = null;
     private int first10 = 0;
 
     @Override
