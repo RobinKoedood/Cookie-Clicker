@@ -3,6 +3,7 @@ import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -72,7 +73,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         System.out.println("start");
-        automatics = new ArrayList<>();
         BorderPane mainPane = new BorderPane();
         canvas = new ResizableCanvas(g -> onResize(g), mainPane);
         cookie = new Cookie(Color.BLACK, new Ellipse2D.Double(canvas.getWidth() / 2 - 100, canvas.getHeight() / 2 - 100, 200, 200));
@@ -96,7 +96,7 @@ public class Main extends Application {
 
         menuQuit.setOnAction(event -> stop());
 
-        menuSave.setOnAction(event -> save("savefile.txt"));
+        menuSave.setOnAction(event -> save("savefile.txt") );
 
         menu.getItems().addAll(menuSave, menuQuit);
 
@@ -134,6 +134,24 @@ public class Main extends Application {
         }, 1, 10);
     }
 
+    private void save( String filename ) {
+        try (PrintWriter writer = new PrintWriter(new File(filename))){
+             writer.println(cookieAnoumt);
+             System.out.println(cookieAnoumt);
+
+             writer.println(perSecond);
+            System.out.println(perSecond);
+
+             for (Automatic a : automatics) {
+                 writer.println(a.getName());
+                 System.out.println(a.getName());
+             }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void draw(FXGraphics2D graphics) {
         update();
 
@@ -168,6 +186,7 @@ public class Main extends Application {
     }
 
     public void init() {
+        automatics = new ArrayList<>();
         try {
             AudioInputStream audioIn =
                     AudioSystem.getAudioInputStream (getClass().getResource("/sound/music.wav")); //
@@ -180,7 +199,7 @@ public class Main extends Application {
             clip.start();
             clip.loop(100);
 
-            readSaveFile("savefile");
+            readSaveFile("savefile.txt");
 
             total = ImageIO.read(getClass().getResource("/bgBlue.png"));
             imageCursorButton = ImageIO.read(getClass().getResource("/cursorButton.png"));
@@ -352,13 +371,61 @@ public class Main extends Application {
         });
     }
 
-    public void save(String itemfile){
 
-    }
 
-    public static Automatic readSaveFile(String infile) {
+    public static boolean readSaveFile(String saveFile) {
+        File file = new File(saveFile);
+        if (file.exists()){
+            try (Scanner reader = new Scanner(file)){
+                if (reader.hasNextLine()){
+                    cookieAnoumt = Long.parseLong(reader.nextLine());
+                    perSecond = Double.parseDouble(reader.nextLine());
+                    while (reader.hasNextLine()){
+                        String nextAutomatic = reader.nextLine();
+                        if (nextAutomatic.equals("AutoCursor")){
+                            AutoCursor autoCursor = new AutoCursor();
+                            automatics.add(autoCursor);
+                        }
+                        else if (nextAutomatic.equals("Grandma")){
+                            Grandma grandma = new Grandma();
+                            automatics.add(grandma);
+                        }
+                        else if (nextAutomatic.equals("Farm")){
+                            Farm farm = new Farm();
+                            automatics.add(farm);
+                        }
+                        else if (nextAutomatic.equals("Mine")){
+                            Mine mine = new Mine();
+                            automatics.add(mine);
+                        }
+                        else if (nextAutomatic.equals("Bank")){
+                            Bank bank = new Bank();
+                            automatics.add(bank);
+                        }
+                        else if (nextAutomatic.equals("Lab")){
+                            Lab lab = new Lab();
+                            automatics.add(lab);
+                        }
+                        else if (nextAutomatic.equals("Factory")){
+                            Factory factory = new Factory();
+                            automatics.add(factory);
+                        }
 
-        return null;
+                    }
+                }
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return true;
     }
 
 
