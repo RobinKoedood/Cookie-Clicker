@@ -16,12 +16,11 @@ public class Farm implements Automatic {
 
     @Override
     public int getCost() {
-        if (first10 < 21){
-            first10++;
+        if (amountOfFarms < 10){
             return 250;
         } else {
-            double i = 250 * (amountOfFarms/10.0);
-            return (int)i;
+            double i = 250 * (((amountOfFarms ) / 10.0));
+            return (int) i;
         }
 
     }
@@ -47,5 +46,9 @@ public class Farm implements Automatic {
 
     public int getAmountOfFarms(){
         return this.amountOfFarms;
+    }
+
+    public void setAmountOfFarms(int amountOfFarms) {
+        this.amountOfFarms = amountOfFarms;
     }
 }

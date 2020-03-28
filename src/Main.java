@@ -9,6 +9,7 @@ import java.util.TimerTask;
 
 import Automatic.*;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 
 import static javafx.application.Application.launch;
@@ -16,7 +17,6 @@ import static javafx.application.Application.launch;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -33,10 +33,11 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 
 public class Main extends Application {
-    private static long cookieAnoumt = 0;
+    private static long cookieAmount = 0;
     private static double perSecond = 0.0;
     private static ResizableCanvas canvas;
     private static ArrayList<Automatic> automatics;
+    private ArrayList<Kruimel> kruimels = new ArrayList<>(10);
     private Cookie cookie = null;
 
     private Label labelAmount;
@@ -55,7 +56,6 @@ public class Main extends Application {
 
     public enum imageState {IDLE, HOVER, HELD}
     private BufferedImage total = null;
-    private BufferedImage imageCursorButton = null;
     private FXGraphics2D fxGraphics2D;
 
     private AutoCursor autoCursor = new AutoCursor();
@@ -74,7 +74,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         System.out.println("start");
         BorderPane mainPane = new BorderPane();
-        canvas = new ResizableCanvas(g -> onResize(g), mainPane);
+        canvas = new ResizableCanvas(g -> draw(g), mainPane);
         cookie = new Cookie(Color.BLACK, new Ellipse2D.Double(canvas.getWidth() / 2 - 100, canvas.getHeight() / 2 - 100, 200, 200));
         fxGraphics2D = new FXGraphics2D(canvas.getGraphicsContext2D());
 
@@ -84,11 +84,15 @@ public class Main extends Application {
         canvas.setOnMouseMoved(event -> mouseMoved(event));
 
 
-        labelAmount = new Label("Amount of cookies: " + cookieAnoumt);
+        labelAmount = new Label("Amount of cookies: " + cookieAmount);
         labelPerSecond = new Label("Per second : " + perSecond);
         labelInformation = new Label ();
         mainPane.setTop(getVboxAmounts());
         mainPane.setRight(getAutomatics());
+
+        for (int i = 0; i < 10; i++) {
+            kruimels.add(i, null);
+        }
 
         Menu menu = new Menu("Game");
         MenuItem menuSave = new MenuItem("Save");
@@ -111,41 +115,47 @@ public class Main extends Application {
         primaryStage.setTitle("Cookie Clicker");
 
         primaryStage.getIcons().add(new Image("favicon.png"));
+        primaryStage.setResizable(false);
         primaryStage.show();
         draw(fxGraphics2D);
 
 
-        Timer timerCursor = new Timer();
-        timerCursor.schedule(new TimerTask() {
+        new AnimationTimer() {
+            long last = -1;
+
             @Override
-            public void run() {
-                if (!automatics.isEmpty()) {
-                    for (Automatic automatic : automatics) {
-                        cookieAnoumt += automatic.update();
-                    }
+            public void handle(long now) {
+                if (last == -1) {
+                    last = now;
                 }
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                update();
+                update((now - last) / 1000000000.0);
+                last = now;
+                draw(fxGraphics2D);
             }
-        }, 1, 10);
+        }.start();
     }
 
     private void save( String filename ) {
         try (PrintWriter writer = new PrintWriter(new File(filename))){
-             writer.println(cookieAnoumt);
-             System.out.println(cookieAnoumt);
+             writer.println(cookieAmount);
+             System.out.println(cookieAmount);
 
              writer.println(perSecond);
             System.out.println(perSecond);
+
+            writer.println(autoCursor.getAmountOfAutoCursors());
+            writer.println(grandma.getAmountOfGrandmas());
+            writer.println(farm.getAmountOfFarms());
+            writer.println(mine.getAmountOfMines());
+            writer.println(factory.getAmountOfFactories());
+            writer.println(bank.getAmountOfBanks());
+            writer.println(lab.getAmountOfLabs());
 
              for (Automatic a : automatics) {
                  writer.println(a.getName());
                  System.out.println(a.getName());
              }
+
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -153,11 +163,12 @@ public class Main extends Application {
     }
 
     public void draw(FXGraphics2D graphics) {
-        update();
 
         graphics.setTransform(new AffineTransform());
         graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
 
+        graphics.drawImage(total, 0,0,(int) canvas.getWidth(), (int) canvas.getHeight(), null);
+        cookie.setEllipse2D(new Ellipse2D.Double(canvas.getWidth() / 2 - 100, canvas.getHeight() / 2 - 100, 200, 200));
 
         switch (cookieState) {
             case IDLE:
@@ -170,11 +181,23 @@ public class Main extends Application {
                 graphics.drawImage(cookie.getImageHeld(), (int) canvas.getWidth() / 2 - 100, (int) canvas.getHeight() / 2 - 100, 200, 200, null);
                 break;
         }
+
+
+        for (Kruimel k : kruimels) {
+            if (k != null)
+                k.draw(graphics);
+        }
     }
-    private void update() {
+
+    private void update(double deltaTime) {
+        for (Automatic a : automatics) {
+            cookieAmount += a.update();
+        }
+
+
         try {
             Platform.runLater(() -> {
-                        labelAmount.setText("Amount of cookies: " + cookieAnoumt);
+                        labelAmount.setText("Amount of cookies: " + cookieAmount);
                         labelPerSecond.setText("Per second: " + perSecond);
 
                     }
@@ -182,6 +205,11 @@ public class Main extends Application {
 
         } catch (Exception e) {
             System.out.println(e);
+        }
+
+        for (Kruimel k : kruimels) {
+            if (k != null)
+            k.update(deltaTime);
         }
     }
 
@@ -202,7 +230,6 @@ public class Main extends Application {
             readSaveFile("savefile.txt");
 
             total = ImageIO.read(getClass().getResource("/bgBlue.png"));
-            imageCursorButton = ImageIO.read(getClass().getResource("/cursorButton.png"));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (UnsupportedAudioFileException e) {
@@ -213,12 +240,7 @@ public class Main extends Application {
 
 
     }
-
-    private void onResize(FXGraphics2D g) {
-        g.setPaint(new TexturePaint(total, new Rectangle2D.Double(canvas.getWidth()/2, canvas.getHeight()/2, canvas.getWidth(), canvas.getHeight())));
-        cookie.setEllipse2D(new Ellipse2D.Double(canvas.getWidth() / 2 - 100, canvas.getHeight() / 2 - 100, 200, 200));
-        draw(g);
-    }
+    
 
     public void stop() {
         System.exit(0);
@@ -252,134 +274,168 @@ public class Main extends Application {
 
     private void getButtonLogics() {
         buttonCursor.setOnAction(event -> {
-            if (cookieAnoumt >= 25) {
+            if (cookieAmount >= 25) {
                 perSecond += autoCursor.getMultiplication();
                 perSecond = roundOf(perSecond);
-                cookieAnoumt -= autoCursor.getCost();
+                cookieAmount -= autoCursor.getCost();
                 autoCursor.addCursor();
                 buttonCursor.setText( autoCursor.getName() + " +1 " + "Cost = " + autoCursor.getCost());
                 automatics.add(autoCursor);
                 labelInformation.setText("New Cursor added!" + " Amount of Cursors: " + autoCursor.getAmountOfAutoCursors());
 
-                System.out.println("Amount of cookies: " + cookieAnoumt);
+                System.out.println("Amount of cookies: " + cookieAmount);
             } else {
                 labelInformation.setText("Not enough cookies. Click more!!");
             }
-            update();
         });
 
         buttonGrandma.setOnAction(event -> {
-            if (cookieAnoumt >= 100) {
+            if (cookieAmount >= 100) {
                 perSecond += grandma.getMultiplication();
                 perSecond = roundOf(perSecond);
-                cookieAnoumt -= grandma.getCost();
+                cookieAmount -= grandma.getCost();
                 grandma.addGrandma();
                 buttonGrandma.setText( grandma.getName() + " +1 " + "Cost = " + grandma.getCost());
                 automatics.add(grandma);
                 labelInformation.setText("New Grandma added!" + " Amount of Grandma's: " + grandma.getAmountOfGrandmas());
 
-                System.out.println("Amount of cookies: " + cookieAnoumt);
+                System.out.println("Amount of cookies: " + cookieAmount);
             } else {
                 labelInformation.setText("Not enough cookies. Click more!!");
             }
-            update();
+
         });
 
         buttonFarm.setOnAction(event -> {
-            if (cookieAnoumt >= 250) {
+            if (cookieAmount >= 250) {
                 perSecond += farm.getMultiplication();
                 perSecond = roundOf(perSecond);
-                cookieAnoumt -= farm.getCost();
+                cookieAmount -= farm.getCost();
                 farm.addFarm();
                 buttonFarm.setText( farm.getName() + " +1 " + "Cost = " + farm.getCost());
                 automatics.add(farm);
                 labelInformation.setText("New farm added!" + " Amount of farms: " + farm.getAmountOfFarms());
 
-                System.out.println("Amount of cookies: " + cookieAnoumt);
+                System.out.println("Amount of cookies: " + cookieAmount);
             } else {
                 labelInformation.setText("Not enough cookies. Click more!!");
             }
-            update();
         });
 
         buttonMine.setOnAction(event -> {
-            if (cookieAnoumt >= 1000) {
+            if (cookieAmount >= 1000) {
                 perSecond += mine.getMultiplication();
                 perSecond = roundOf(perSecond);
-                cookieAnoumt -= mine.getCost();
+                cookieAmount -= mine.getCost();
                 mine.addMine();
                 buttonMine.setText( mine.getName() + " +1 " + "Cost = " + mine.getCost());
                 automatics.add(mine);
                 labelInformation.setText("New Mine added!" + " Amount of Mines: " + mine.getAmountOfMines());
 
-                System.out.println("Amount of cookies: " + cookieAnoumt);
+                System.out.println("Amount of cookies: " + cookieAmount);
             } else {
                 labelInformation.setText("Not enough cookies. Click more!!");
             }
-            update();
         });
 
         buttonFactory.setOnAction(event -> {
-            if (cookieAnoumt >= 2500) {
+            if (cookieAmount >= 2500) {
                 perSecond += factory.getMultiplication();
                 perSecond = roundOf(perSecond);
-                cookieAnoumt -= factory.getCost();
+                cookieAmount -= factory.getCost();
                 factory.addFactory();
                 buttonFactory.setText( factory.getName() + " +1 " + "Cost = " + factory.getCost());
                 automatics.add(factory);
                 labelInformation.setText("New Factory added!" + " Amount of Factories: " + factory.getAmountOfFactories());
 
-                System.out.println("Amount of cookies: " + cookieAnoumt);
+                System.out.println("Amount of cookies: " + cookieAmount);
             } else {
                 labelInformation.setText("Not enough cookies. Click more!!");
             }
-            update();
         });
 
         buttonBank.setOnAction(event -> {
-            if (cookieAnoumt >= 5000) {
+            if (cookieAmount >= 5000) {
                 perSecond += bank.getMultiplication();
                 perSecond = roundOf(perSecond);
-                cookieAnoumt -= bank.getCost();
+                cookieAmount -= bank.getCost();
                 bank.addBank();
                 buttonBank.setText( bank.getName() + " +1 " + "Cost = " + bank.getCost());
                 automatics.add(bank);
                 labelInformation.setText("New Bank added!" + " Amount of Banks: " + bank.getAmountOfBanks());
 
-                System.out.println("Amount of cookies: " + cookieAnoumt);
+                System.out.println("Amount of cookies: " + cookieAmount);
             } else {
                 labelInformation.setText("Not enough cookies. Click more!!");
             }
-            update();
         });
 
         buttonLab.setOnAction(event -> {
-            if (cookieAnoumt >= 10000) {
+            if (cookieAmount >= 10000) {
                 perSecond += lab.getMultiplication();
                 perSecond = roundOf(perSecond);
-                cookieAnoumt -= lab.getCost();
+                cookieAmount -= lab.getCost();
                 lab.addLab();
                 buttonLab.setText( lab.getName() + " +1 " + "Cost = " + lab.getCost());
                 automatics.add(lab);
                 labelInformation.setText("New Lab added!" + " Amount of Labs: " + lab.getAmountOfLabs());
 
-                System.out.println("Amount of cookies: " + cookieAnoumt);
+                System.out.println("Amount of cookies: " + cookieAmount);
             } else {
                 labelInformation.setText("Not enough cookies. Click more!!");
             }
-            update();
         });
     }
 
 
 
-    public static boolean readSaveFile(String saveFile) {
+    public boolean readSaveFile(String saveFile) {
         File file = new File(saveFile);
         if (file.exists()){
             try (Scanner reader = new Scanner(file)){
                 if (reader.hasNextLine()){
-                    cookieAnoumt = Long.parseLong(reader.nextLine());
+                    cookieAmount = Long.parseLong(reader.nextLine());
                     perSecond = Double.parseDouble(reader.nextLine());
+                    autoCursor.setAmountOfAutoCursors(Integer.parseInt(reader.nextLine()));
+                    grandma.setAmountOfGrandmas(Integer.parseInt(reader.nextLine()));
+                    farm.setAmountOfFarms(Integer.parseInt(reader.nextLine()));
+                    mine.setAmountOfMines(Integer.parseInt(reader.nextLine()));
+                    factory.setAmountOfFactories(Integer.parseInt(reader.nextLine()));
+                    bank.setAmountOfBanks(Integer.parseInt(reader.nextLine()));
+                    lab.setAmountOfLabs(Integer.parseInt(reader.nextLine()));
+
+                    for (int i = 0; i < autoCursor.getAmountOfAutoCursors(); i++) {
+                        automatics.add(new AutoCursor());
+                    }
+                    for (int i = 0; i < grandma.getAmountOfGrandmas(); i++) {
+                        automatics.add(new Grandma());
+                    }
+                    for (int i = 0; i < farm.getAmountOfFarms(); i++) {
+                        automatics.add(new Farm());
+                    }
+                    for (int i = 0; i < mine.getAmountOfMines(); i++) {
+                        automatics.add(new Mine());
+                    }
+                    for (int i = 0; i < factory.getAmountOfFactories(); i++) {
+                        automatics.add(new Factory());
+                    }
+                    for (int i = 0; i < bank.getAmountOfBanks(); i++) {
+                        automatics.add(new Bank());
+                    }
+                    for (int i = 0; i < lab.getAmountOfLabs(); i++) {
+                        automatics.add(new Lab());
+                    }
+
+                    /*
+                    writer.println(autoCursor.getAmountOfAutoCursors());
+                     writer.println(grandma.getAmountOfGrandmas());
+                    writer.println(farm.getAmountOfFarms());
+                    writer.println(mine.getAmountOfMines());
+                    writer.println(factory.getAmountOfFactories());
+                    writer.println(bank.getAmountOfBanks());
+                   riter.println(lab.getAmountOfLabs());
+                     */
+
                     while (reader.hasNextLine()){
                         String nextAutomatic = reader.nextLine();
                         if (nextAutomatic.equals("AutoCursor")){
@@ -433,13 +489,16 @@ public class Main extends Application {
         if (cookie.getEllipse2D().contains(e.getX(), e.getY())) {
             cookieState = imageState.HELD;
             draw(fxGraphics2D);
-            cookieAnoumt++;
+            cookieAmount++;
         }
-        update();
     }
 
     private void mouseReleased(MouseEvent e) {
         if (cookie.getEllipse2D().contains(e.getX(), e.getY())) {
+            for (int i = 0; i < 10; i++) {
+                kruimels.set(i, new Kruimel(e.getX(), e.getY()));
+            }
+
             cookieState = imageState.HOVER;
         } else {
             cookieState = imageState.IDLE;

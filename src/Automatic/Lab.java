@@ -15,12 +15,11 @@ public class Lab implements Automatic {
 
     @Override
     public int getCost() {
-        if (first10 < 21){
-            first10++;
+        if (amountOfLabs < 10){
             return 10000;
         } else {
-            double i = 10000 * (amountOfLabs/10.0);
-            return (int)i;
+            double i = 10000 * (((amountOfLabs ) / 10.0));
+            return (int) i;
         }
     }
 
@@ -47,4 +46,7 @@ public class Lab implements Automatic {
         return amountOfLabs;
     }
 
+    public void setAmountOfLabs(int amountOfLabs) {
+        this.amountOfLabs = amountOfLabs;
+    }
 }

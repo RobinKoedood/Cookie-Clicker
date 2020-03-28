@@ -15,11 +15,10 @@ public class Factory implements Automatic {
 
     @Override
     public int getCost() {
-        if (first10 < 21){
-            first10++;
+        if (amountOfFactories < 10){
             return 2500;
         } else {
-            double i = 2500 * (amountOfFactories/10.0);
+            double i = 2500 * (((amountOfFactories ) / 10.0));
             return (int) i;
         }
     }
@@ -45,5 +44,9 @@ public class Factory implements Automatic {
 
     public int getAmountOfFactories() {
         return amountOfFactories;
+    }
+
+    public void setAmountOfFactories(int amountOfFactories) {
+        this.amountOfFactories = amountOfFactories;
     }
 }

@@ -20,11 +20,10 @@ public class Mine implements Automatic {
 
     @Override
     public int getCost() {
-        if (first10 < 21){
-            first10++;
+        if (amountOfMines < 10){
             return 1000;
         } else {
-            double i = 1000 * (amountOfMines/10.0);
+            double i = 1000 * (((amountOfMines ) / 10.0));
             return (int) i;
         }
 
@@ -51,5 +50,9 @@ public class Mine implements Automatic {
 
     public int getAmountOfMines() {
         return amountOfMines;
+    }
+
+    public void setAmountOfMines(int amountOfMines) {
+        this.amountOfMines = amountOfMines;
     }
 }

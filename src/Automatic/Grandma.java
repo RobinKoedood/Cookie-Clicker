@@ -12,11 +12,10 @@ public class Grandma implements Automatic {
 
     @Override
     public int getCost() {
-        if (first10 < 21){
-            first10++;
+        if (amountOfGrandmas < 10){
             return 100;
         } else {
-            double i = 100 * (amountOfGrandmas/10.0);
+            double i = 100 * (((amountOfGrandmas ) / 10.0));
             return (int) i;
         }
 
@@ -57,5 +56,9 @@ public class Grandma implements Automatic {
 
     public int getAmountOfGrandmas(){
         return this.amountOfGrandmas;
+    }
+
+    public void setAmountOfGrandmas(int amountOfGrandmas) {
+        this.amountOfGrandmas = amountOfGrandmas;
     }
 }
